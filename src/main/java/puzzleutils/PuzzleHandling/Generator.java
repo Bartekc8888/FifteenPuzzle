@@ -1,4 +1,4 @@
-package puzzleutils;
+package puzzleutils.PuzzleHandling;
 
 //
 // Source code recreated from a .class file by IntelliJ IDEA
@@ -7,8 +7,11 @@ package puzzleutils;
 
 import java.util.*;
 
+import lombok.extern.slf4j.Slf4j;
+import puzzleutils.PuzzleContainers.Puzzle;
+
+@Slf4j
 public class Generator {
-    private String path;
     private int maxDepth;
     private int size;
     private static final int[][] HELP_ARRAY_SIZE_2 = new int[][]{{1, 2}, {0, 3}, {0, 3}, {1, 2}};
@@ -20,11 +23,8 @@ public class Generator {
     private static final byte[] START_ARRAY_SIZE_4 = new byte[]{18, 52, 86, 120, -102, -68, -34, -16};
     private byte[] valuesArray;
     private int[][] helpArray;
-    private List<byte[]> visitedNodes = new ArrayList<>();
-    private Queue<byte[]> queue = new LinkedList<>();
 
-    public Generator(String path, int size, int maxDepth) {
-        this.path = path;
+    public Generator(int size, int maxDepth) {
         this.maxDepth = maxDepth;
         this.size = size;
         switch (this.size) {
@@ -39,41 +39,54 @@ public class Generator {
             case 4:
                 this.helpArray = HELP_ARRAY_SIZE_4;
                 this.valuesArray = START_ARRAY_SIZE_4;
+                break;
+            default:
+                throw new IllegalArgumentException();
         }
 
-        System.out.println(this);
+        log.trace(this.toString());
     }
 
-    public void generate() {
+    public void generateToFile(String path) {
+        Puzzle puzzle = generate();
+
+        Serializer.printToFile(path, puzzle);
+    }
+
+    public Puzzle generate() {
+        List<byte[]> visitedNodes = new ArrayList<>();
+        Queue<byte[]> queue = new LinkedList<>();
         int depth = 0;
-        this.queue.add(this.valuesArray);
-        Serializer serializer = new Serializer(this.path, this.size);
+        queue.add(this.valuesArray);
+
 
         while (depth != this.maxDepth) {
             Queue<byte[]> tempQueue = new LinkedList<>();
             ++depth;
 
-            while (!this.queue.isEmpty()) {
-                byte[] element = this.queue.remove();
+            while (!queue.isEmpty()) {
+                byte[] element = queue.remove();
                 List<byte[]> children = this.generateChildren(element);
 
                 for (byte[] child : children) {
-                    if (!this.isAlreadyVisited(child)) {
+                    if (!this.isAlreadyVisited(visitedNodes, child)) {
                         tempQueue.add(child);
-                        this.visitedNodes.add(child);
+                        visitedNodes.add(child);
                     }
                 }
             }
 
-            this.queue = tempQueue;
-            serializer.printToFile(this.visitedNodes, depth);
+            queue = tempQueue;
         }
 
+        Random random = new Random();
+        byte[] nodeValues = visitedNodes.get(random.nextInt(visitedNodes.size()));
+        int[] puzzleValues = convertToFullWidthByte(nodeValues);
+        return Puzzle.createPuzzle(size, size, puzzleValues);
     }
 
-    private boolean isAlreadyVisited(byte[] child) {
-
-        for (byte[] visited : this.visitedNodes) {
+    private boolean isAlreadyVisited(List<byte[]> visitedNodes, byte[] child) {
+        for (byte[] visited : visitedNodes) {
             if (Arrays.equals(child, visited)) {
                 return true;
             }
@@ -135,5 +148,19 @@ public class Generator {
         }
 
         return children;
+    }
+
+    private int[] convertToFullWidthByte(byte[] halfWidthBytes) {
+        int[] fullWidthBytes = new int[size*size];
+
+        for (int i = 0; i < fullWidthBytes.length; i++) {
+            if (i % 2 == 0) {
+                fullWidthBytes[i] = (halfWidthBytes[i / 2] & 240) >> 4;
+            } else {
+                fullWidthBytes[i] = halfWidthBytes[i / 2] & 15;
+            }
+        }
+
+        return fullWidthBytes;
     }
 }
