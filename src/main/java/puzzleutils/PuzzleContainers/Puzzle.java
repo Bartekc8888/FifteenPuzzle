@@ -8,9 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import puzzleutils.Move;
+import puzzleutils.exceptions.InvalidPuzzle;
 
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"values"})
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Puzzle {
     private final int width;
@@ -24,6 +25,10 @@ public class Puzzle {
     }
 
     public static Puzzle createPuzzle(int width, int height, int[] values) {
+        if (width * height != values.length) {
+            throw new InvalidPuzzle("Given size is incorrect");
+        }
+
         return new Puzzle(width, height, values);
     }
 
@@ -43,8 +48,12 @@ public class Puzzle {
     }
 
     public boolean isResolved() {
-        for (int i = 0; i < values.length; i++) {
-            for (int j = i; j < values.length; j++) {
+        if (values[values.length - 1] != 0) {
+            return false;
+        }
+
+        for (int i = 0; i < values.length - 1; i++) {
+            for (int j = i; j < values.length - 1; j++) {
                 if (values[i] > values[j]) {
                     return false;
                 }
@@ -88,7 +97,7 @@ public class Puzzle {
             }
         }
 
-        return -1;
+        throw new InvalidPuzzle("Value 0 not found in puzzle.");
     }
 
     private int getMovedIndexOfEmpty(Move move) {

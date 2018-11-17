@@ -2,35 +2,52 @@ package PuzzleSolvers;
 
 import java.util.*;
 
+import lombok.AllArgsConstructor;
 import puzzleutils.Move;
 import puzzleutils.PuzzleContainers.Puzzle;
 import puzzleutils.PuzzleContainers.PuzzleNode;
 
-public class BFSAlgorithm {
+@AllArgsConstructor
+public class BFSAlgorithm implements PuzzleSolver {
 
-    public static List<Move> solve(Puzzle puzzle) {
-        PuzzleNode root = new PuzzleNode(puzzle, null, null);
+    private int maxRecursionDepth;
 
-        Queue<PuzzleNode> openNodes = new ArrayDeque<>();
-        Set<PuzzleNode> closedNodes = new HashSet<>();
+    @Override
+    public List<Move> solve(Puzzle puzzle) {
+        int recursionDepth = 0;
+        Queue<PuzzleNode> openNodes;
+        Queue<PuzzleNode> nextLevelOpenNodes = new ArrayDeque<>();
+        Set<PuzzleNode> processedNodes = new HashSet<>();
         List<Move> path = new LinkedList<>();
 
-        openNodes.add(root);
+        PuzzleNode root = new PuzzleNode(puzzle, null, null);
+        nextLevelOpenNodes.add(root);
+        processedNodes.add(root);
 
         boolean isSolutionFound = false;
-        while (openNodes.size() > 0 && !isSolutionFound) {
-            PuzzleNode currentNode = openNodes.remove();
-            closedNodes.add(currentNode);
+        while (nextLevelOpenNodes.size() > 0 && !isSolutionFound) {
+            if (recursionDepth > maxRecursionDepth) {
+                break;
+            }
+            recursionDepth++;
 
-            List<PuzzleNode> expandedNodes = expandNode(currentNode);
-            for (PuzzleNode node : expandedNodes) {
-                if (node.getPuzzleState().isResolved()) {
-                    isSolutionFound = true;
-                    path = tracePath(node);
-                }
+            openNodes = nextLevelOpenNodes;
+            nextLevelOpenNodes = new ArrayDeque<>();
 
-                if (!closedNodes.contains(node) && !openNodes.contains(node)) {
-                    openNodes.add(node);
+            while (openNodes.size() > 0 && !isSolutionFound) {
+                PuzzleNode currentNode = openNodes.remove();
+
+                List<PuzzleNode> expandedNodes = expandNode(currentNode);
+                for (PuzzleNode node : expandedNodes) {
+                    if (node.getPuzzleState().isResolved()) {
+                        isSolutionFound = true;
+                        path = node.tracePath();
+                    }
+
+                    if (!processedNodes.contains(node)) {
+                        nextLevelOpenNodes.add(node);
+                        processedNodes.add(node);
+                    }
                 }
             }
         }
@@ -38,7 +55,7 @@ public class BFSAlgorithm {
         return path;
     }
 
-    private static List<PuzzleNode> expandNode(PuzzleNode node) {
+    private List<PuzzleNode> expandNode(PuzzleNode node) {
         List<PuzzleNode> children = new ArrayList<>();
 
         List<Move> possibleMoves = node.getPuzzleState().getPossibleMoves();
@@ -48,19 +65,5 @@ public class BFSAlgorithm {
         }
 
         return children;
-    }
-
-    private static List<Move> tracePath(PuzzleNode node) {
-        List<Move> path = new LinkedList<>();
-
-        PuzzleNode currentNode = node;
-        while (currentNode.getParent() != null) {
-            path.add(currentNode.getCreationMove());
-
-            currentNode = currentNode.getParent();
-        }
-
-        Collections.reverse(path);
-        return path;
     }
 }

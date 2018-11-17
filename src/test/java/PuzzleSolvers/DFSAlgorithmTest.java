@@ -2,6 +2,7 @@ package PuzzleSolvers;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import puzzleutils.Move;
@@ -9,7 +10,8 @@ import puzzleutils.PuzzleContainers.Puzzle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BFSAlgorithmTest {
+@Slf4j
+class DFSAlgorithmTest {
 
     @Test
     void solve() {
@@ -21,8 +23,8 @@ class BFSAlgorithmTest {
                                7, 8, 0};
         Puzzle puzzle = Puzzle.createPuzzle(3, 3, puzzleValues);
 
-        BFSAlgorithm bfsAlgorithm = new BFSAlgorithm(64);
-        List<Move> result = bfsAlgorithm.solve(puzzle);
+        DFSAlgorithm dfsAlgorithm = new DFSAlgorithm(18);
+        List<Move> result = dfsAlgorithm.solve(puzzle);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -37,20 +39,19 @@ class BFSAlgorithmTest {
     }
 
     @Test
-    @Disabled("Very long test")
     void solveBig() {
-        int[] puzzleValues = {0, 1, 2, 7,
-                              8, 9, 12, 10,
-                              13, 3, 6, 4,
-                              15, 14, 11, 5};
+        int[] puzzleValues = {1, 2, 3, 4,
+                              5, 7, 11, 8,
+                              9, 6, 14, 12,
+                              13, 10, 0, 15};
         int[] correctPuzzle = {1, 2, 3, 4,
                                5, 6, 7, 8,
                                9, 10, 11, 12,
                                13, 14, 15, 0};
         Puzzle puzzle = Puzzle.createPuzzle(4, 4, puzzleValues);
 
-        BFSAlgorithm bfsAlgorithm = new BFSAlgorithm(64);
-        List<Move> result = bfsAlgorithm.solve(puzzle);
+        DFSAlgorithm dfsAlgorithm = new DFSAlgorithm(20);
+        List<Move> result = dfsAlgorithm.solve(puzzle);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());

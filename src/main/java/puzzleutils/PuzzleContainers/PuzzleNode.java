@@ -1,6 +1,8 @@
 package puzzleutils.PuzzleContainers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
@@ -22,5 +24,19 @@ public class PuzzleNode {
         this.creationMove = creationMove;
         this.parent = parent;
         puzzleState = state;
+    }
+
+    public List<Move> tracePath() {
+        List<Move> path = new LinkedList<>();
+
+        PuzzleNode currentNode = this;
+        while (currentNode.getParent() != null) {
+            path.add(currentNode.getCreationMove());
+
+            currentNode = currentNode.getParent();
+        }
+
+        Collections.reverse(path);
+        return path;
     }
 }
