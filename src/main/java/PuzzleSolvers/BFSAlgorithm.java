@@ -10,11 +10,11 @@ import puzzleutils.PuzzleContainers.PuzzleNode;
 @AllArgsConstructor
 public class BFSAlgorithm implements PuzzleSolver {
 
-    private int maxRecursionDepth;
+    private int maxGraphDepth;
 
     @Override
     public List<Move> solve(Puzzle puzzle) {
-        int recursionDepth = 0;
+        int graphDepth = 0;
         Queue<PuzzleNode> openNodes;
         Queue<PuzzleNode> nextLevelOpenNodes = new ArrayDeque<>();
         Set<PuzzleNode> processedNodes = new HashSet<>();
@@ -26,10 +26,10 @@ public class BFSAlgorithm implements PuzzleSolver {
 
         boolean isSolutionFound = false;
         while (nextLevelOpenNodes.size() > 0 && !isSolutionFound) {
-            if (recursionDepth > maxRecursionDepth) {
+            if (graphDepth > maxGraphDepth) {
                 break;
             }
-            recursionDepth++;
+            graphDepth++;
 
             openNodes = nextLevelOpenNodes;
             nextLevelOpenNodes = new ArrayDeque<>();
@@ -37,7 +37,7 @@ public class BFSAlgorithm implements PuzzleSolver {
             while (openNodes.size() > 0 && !isSolutionFound) {
                 PuzzleNode currentNode = openNodes.remove();
 
-                List<PuzzleNode> expandedNodes = expandNode(currentNode);
+                List<? extends PuzzleNode> expandedNodes = currentNode.getNextLevelNodes();
                 for (PuzzleNode node : expandedNodes) {
                     if (node.getPuzzleState().isResolved()) {
                         isSolutionFound = true;
@@ -53,17 +53,5 @@ public class BFSAlgorithm implements PuzzleSolver {
         }
 
         return path;
-    }
-
-    private List<PuzzleNode> expandNode(PuzzleNode node) {
-        List<PuzzleNode> children = new ArrayList<>();
-
-        List<Move> possibleMoves = node.getPuzzleState().getPossibleMoves();
-        for (Move move : possibleMoves) {
-            Puzzle newPuzzleState = node.getPuzzleState().move(move);
-            children.add(new PuzzleNode(newPuzzleState, node, move));
-        }
-
-        return children;
     }
 }

@@ -27,13 +27,7 @@ public class DFSAlgorithm implements PuzzleSolver {
             return Optional.empty();
         }
 
-        List<PuzzleNode> nextLevelNodes = new ArrayList<>();
-
-        List<Move> possibleMoves = node.getPuzzleState().getPossibleMoves();
-        for (Move move : possibleMoves) {
-            Puzzle newPuzzleState = node.getPuzzleState().move(move);
-            nextLevelNodes.add(new PuzzleNode(newPuzzleState, node, move));
-        }
+        List<? extends PuzzleNode> nextLevelNodes = node.getNextLevelNodes();
 
         for (PuzzleNode puzzleNode : nextLevelNodes) {
             Optional<PuzzleNode> solvedRecursively = solveRecursively(puzzleNode, currentDepth + 1);

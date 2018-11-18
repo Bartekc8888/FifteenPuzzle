@@ -63,7 +63,7 @@ public class Puzzle {
         return true;
     }
 
-    public List<Move> getPossibleMoves() {
+    List<Move> getPossibleMoves() {
         List<Move> validMoves = new ArrayList<>();
 
         for (Move direction : Move.values()) {
@@ -73,6 +73,19 @@ public class Puzzle {
         }
 
         return validMoves;
+    }
+
+    public int[] getValues() {
+        return values.clone();
+    }
+
+
+    public int getValueAt(int index) {
+        if (index < values.length) {
+            return values[index];
+        } else {
+            return -1;
+        }
     }
 
     @Override

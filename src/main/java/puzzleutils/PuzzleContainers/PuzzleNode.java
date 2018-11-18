@@ -39,4 +39,16 @@ public class PuzzleNode {
         Collections.reverse(path);
         return path;
     }
+
+    public List<? extends PuzzleNode> getNextLevelNodes() {
+        List<PuzzleNode> nextLevelNodes = new ArrayList<>();
+
+        List<Move> possibleMoves = getPuzzleState().getPossibleMoves();
+        for (Move move : possibleMoves) {
+            Puzzle newPuzzleState = getPuzzleState().move(move);
+            nextLevelNodes.add(new PuzzleNode(newPuzzleState, this, move));
+        }
+
+        return nextLevelNodes;
+    }
 }
