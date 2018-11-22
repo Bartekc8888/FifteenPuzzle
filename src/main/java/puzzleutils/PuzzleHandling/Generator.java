@@ -50,10 +50,10 @@ public class Generator {
     public void generateToFile(String path) {
         Puzzle puzzle = generate();
 
-        Serializer.printToFile(path, puzzle);
+        PuzzleSerializer.printToFile(path, puzzle);
     }
 
-    public Puzzle generate() {
+    private Puzzle generate() {
         List<byte[]> visitedNodes = new ArrayList<>();
         Queue<byte[]> queue = new LinkedList<>();
         int depth = 0;

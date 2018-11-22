@@ -3,7 +3,6 @@ package PuzzleSolvers;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import puzzleutils.Move;
 import puzzleutils.PuzzleContainers.Puzzle;
@@ -24,7 +23,7 @@ class DFSAlgorithmTest {
         Puzzle puzzle = Puzzle.createPuzzle(3, 3, puzzleValues);
 
         DFSAlgorithm dfsAlgorithm = new DFSAlgorithm(18);
-        List<Move> result = dfsAlgorithm.solve(puzzle);
+        List<Move> result = dfsAlgorithm.solve(puzzle).getSolveMoves();
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -51,7 +50,7 @@ class DFSAlgorithmTest {
         Puzzle puzzle = Puzzle.createPuzzle(4, 4, puzzleValues);
 
         DFSAlgorithm dfsAlgorithm = new DFSAlgorithm(20);
-        List<Move> result = dfsAlgorithm.solve(puzzle);
+        List<Move> result = dfsAlgorithm.solve(puzzle).getSolveMoves();
 
         assertNotNull(result);
         assertFalse(result.isEmpty());

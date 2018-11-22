@@ -1,11 +1,9 @@
 package PuzzleSolvers;
 
-import java.util.List;
-
-import puzzleutils.Move;
 import puzzleutils.PuzzleContainers.Puzzle;
+import puzzleutils.PuzzleContainers.PuzzleSolvingResult;
 
 public interface PuzzleSolver {
 
-    List<Move> solve(Puzzle puzzle);
+    PuzzleSolvingResult solve(Puzzle puzzle);
 }

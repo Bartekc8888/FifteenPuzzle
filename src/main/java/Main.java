@@ -1,8 +1,14 @@
+import PuzzleSolvers.PuzzleSolver;
+import PuzzleSolvers.PuzzleSolverFactory;
 import Tools.GeneratorArguments;
 import Tools.SolverArguments;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
+import puzzleutils.PuzzleContainers.Puzzle;
+import puzzleutils.PuzzleContainers.PuzzleSolvingResult;
 import puzzleutils.PuzzleHandling.Generator;
+import puzzleutils.PuzzleHandling.PuzzleSerializer;
+import puzzleutils.PuzzleHandling.ResultSerializer;
 
 @Slf4j
 public class Main {
@@ -25,7 +31,12 @@ public class Main {
 
             SolverArguments solverArguments = new SolverArguments();
             new CommandLine(solverArguments).setCaseInsensitiveEnumValuesAllowed(true).parse(args);
-        }
 
+            Puzzle puzzle = PuzzleSerializer.readFromFile(solverArguments.getSourceFile());
+            PuzzleSolver puzzleSolver = PuzzleSolverFactory.createPuzzleSolver(solverArguments);
+
+            PuzzleSolvingResult solvedResults = puzzleSolver.solve(puzzle);
+            ResultSerializer.serializeResult(solvedResults, solverArguments.getResultFile(), solverArguments.getMetadataFile());
+        }
     }
 }

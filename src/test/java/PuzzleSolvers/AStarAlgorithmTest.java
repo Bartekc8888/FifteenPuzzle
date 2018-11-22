@@ -24,7 +24,7 @@ class AStarAlgorithmTest {
         Puzzle puzzle = Puzzle.createPuzzle(3, 3, puzzleValues);
 
         AStarAlgorithm AStarAlgorithm = new AStarAlgorithm(64, new ManhattanDistance());
-        List<Move> result = AStarAlgorithm.solve(puzzle);
+        List<Move> result = AStarAlgorithm.solve(puzzle).getSolveMoves();
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -49,7 +49,7 @@ class AStarAlgorithmTest {
         Puzzle puzzle = Puzzle.createPuzzle(3, 3, puzzleValues);
 
         AStarAlgorithm AStarAlgorithm = new AStarAlgorithm(64, new HammingDistance());
-        List<Move> result = AStarAlgorithm.solve(puzzle);
+        List<Move> result = AStarAlgorithm.solve(puzzle).getSolveMoves();
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -77,7 +77,7 @@ class AStarAlgorithmTest {
         Puzzle puzzle = Puzzle.createPuzzle(4, 4, puzzleValues);
 
         AStarAlgorithm AStarAlgorithm = new AStarAlgorithm(64, new ManhattanDistance());
-        List<Move> result = AStarAlgorithm.solve(puzzle);
+        List<Move> result = AStarAlgorithm.solve(puzzle).getSolveMoves();
 
         assertNotNull(result);
         assertFalse(result.isEmpty());

@@ -1,25 +1,38 @@
 package PuzzleSolvers;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 import puzzleutils.Move;
 import puzzleutils.PuzzleContainers.Puzzle;
 import puzzleutils.PuzzleContainers.PuzzleNode;
+import puzzleutils.PuzzleContainers.PuzzleSolvingMetadata;
+import puzzleutils.PuzzleContainers.PuzzleSolvingResult;
 
 @AllArgsConstructor
 public class DFSAlgorithm implements PuzzleSolver {
     private int maxRecursionDepth;
 
     @Override
-    public List<Move> solve(Puzzle puzzle) {
+    public PuzzleSolvingResult solve(Puzzle puzzle) {
+        PuzzleSolvingMetadata metadata = new PuzzleSolvingMetadata();
         PuzzleNode root = new PuzzleNode(puzzle, null, null);
-        Optional<PuzzleNode> node = solveRecursively(root, 1);
 
-        return node.map(PuzzleNode::tracePath).orElse(Collections.emptyList());
+        metadata.startMeasuringTime();
+        Optional<PuzzleNode> node = solveRecursively(root, 1, metadata);
+        metadata.stopMeasuringTime();
+
+        List<Move> moves = node.map(PuzzleNode::tracePath).orElse(Collections.emptyList());
+        return new PuzzleSolvingResult(moves, metadata);
     }
 
-    private Optional<PuzzleNode> solveRecursively(PuzzleNode node, int currentDepth) {
+    private Optional<PuzzleNode> solveRecursively(PuzzleNode node, int currentDepth, PuzzleSolvingMetadata metadata) {
+        metadata.updateRecursionDepthIfGreater(currentDepth);
+        metadata.incrementProcessedStates();
+        metadata.incrementVisitedStates();
+
         if (node.getPuzzleState().isResolved()) {
             return Optional.of(node);
         }
@@ -30,7 +43,9 @@ public class DFSAlgorithm implements PuzzleSolver {
         List<? extends PuzzleNode> nextLevelNodes = node.getNextLevelNodes();
 
         for (PuzzleNode puzzleNode : nextLevelNodes) {
-            Optional<PuzzleNode> solvedRecursively = solveRecursively(puzzleNode, currentDepth + 1);
+            Optional<PuzzleNode> solvedRecursively = solveRecursively(puzzleNode, currentDepth + 1, metadata);
+            metadata.incrementVisitedStates();
+
             if (solvedRecursively.isPresent()) {
                 return solvedRecursively;
             }

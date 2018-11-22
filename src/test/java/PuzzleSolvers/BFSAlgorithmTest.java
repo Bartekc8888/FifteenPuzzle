@@ -22,7 +22,7 @@ class BFSAlgorithmTest {
         Puzzle puzzle = Puzzle.createPuzzle(3, 3, puzzleValues);
 
         BFSAlgorithm bfsAlgorithm = new BFSAlgorithm(64);
-        List<Move> result = bfsAlgorithm.solve(puzzle);
+        List<Move> result = bfsAlgorithm.solve(puzzle).getSolveMoves();
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -50,7 +50,7 @@ class BFSAlgorithmTest {
         Puzzle puzzle = Puzzle.createPuzzle(4, 4, puzzleValues);
 
         BFSAlgorithm bfsAlgorithm = new BFSAlgorithm(64);
-        List<Move> result = bfsAlgorithm.solve(puzzle);
+        List<Move> result = bfsAlgorithm.solve(puzzle).getSolveMoves();
 
         assertNotNull(result);
         assertFalse(result.isEmpty());

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import puzzleutils.Move;
 import puzzleutils.PuzzleContainers.Puzzle;
 import puzzleutils.PuzzleContainers.PuzzleNode;
+import puzzleutils.PuzzleContainers.PuzzleSolvingMetadata;
+import puzzleutils.PuzzleContainers.PuzzleSolvingResult;
 
 @AllArgsConstructor
 public class BFSAlgorithm implements PuzzleSolver {
@@ -13,7 +15,8 @@ public class BFSAlgorithm implements PuzzleSolver {
     private int maxGraphDepth;
 
     @Override
-    public List<Move> solve(Puzzle puzzle) {
+    public PuzzleSolvingResult solve(Puzzle puzzle) {
+        PuzzleSolvingMetadata metadata = new PuzzleSolvingMetadata();
         int graphDepth = 0;
         Queue<PuzzleNode> openNodes;
         Queue<PuzzleNode> nextLevelOpenNodes = new ArrayDeque<>();
@@ -24,8 +27,11 @@ public class BFSAlgorithm implements PuzzleSolver {
         nextLevelOpenNodes.add(root);
         processedNodes.add(root);
 
+        metadata.startMeasuringTime();
         boolean isSolutionFound = false;
         while (nextLevelOpenNodes.size() > 0 && !isSolutionFound) {
+            metadata.incrementVisitedStates();
+
             if (graphDepth > maxGraphDepth) {
                 break;
             }
@@ -39,6 +45,8 @@ public class BFSAlgorithm implements PuzzleSolver {
 
                 List<? extends PuzzleNode> expandedNodes = currentNode.getNextLevelNodes();
                 for (PuzzleNode node : expandedNodes) {
+                    metadata.incrementProcessedStates();
+
                     if (node.getPuzzleState().isResolved()) {
                         isSolutionFound = true;
                         path = node.tracePath();
@@ -51,7 +59,9 @@ public class BFSAlgorithm implements PuzzleSolver {
                 }
             }
         }
+        metadata.stopMeasuringTime();
+        metadata.setRecursionDepth(graphDepth);
 
-        return path;
+        return new PuzzleSolvingResult(path, metadata);
     }
 }
