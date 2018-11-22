@@ -26,6 +26,10 @@ public class PuzzleSolvingMetadata {
         processedStates++;
     }
 
+    public void addToProcessedStates(int number) {
+        processedStates += number;
+    }
+
     public void startMeasuringTime() {
         startTime = System.nanoTime();
     }

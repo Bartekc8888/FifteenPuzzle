@@ -33,9 +33,8 @@ public class DFSAlgorithm implements PuzzleSolver {
 
     private Optional<PuzzleNode> solveRecursively(PuzzleNode node, int currentDepth, PuzzleSolvingMetadata metadata) {
         metadata.updateRecursionDepthIfGreater(currentDepth);
-        metadata.incrementProcessedStates();
-        metadata.incrementVisitedStates();
 
+        metadata.incrementVisitedStates();
         if (node.getPuzzleState().isResolved()) {
             return Optional.of(node);
         }
@@ -44,10 +43,10 @@ public class DFSAlgorithm implements PuzzleSolver {
         }
 
         List<? extends PuzzleNode> nextLevelNodes = node.getNextLevelNodes();
+        metadata.addToProcessedStates(nextLevelNodes.size());
 
         for (PuzzleNode puzzleNode : nextLevelNodes) {
             Optional<PuzzleNode> solvedRecursively = solveRecursively(puzzleNode, currentDepth + 1, metadata);
-            metadata.incrementVisitedStates();
 
             if (solvedRecursively.isPresent()) {
                 return solvedRecursively;

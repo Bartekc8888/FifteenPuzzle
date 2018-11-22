@@ -30,8 +30,6 @@ public class BFSAlgorithm implements PuzzleSolver {
         metadata.startMeasuringTime();
         boolean isSolutionFound = false;
         while (nextLevelOpenNodes.size() > 0 && !isSolutionFound) {
-            metadata.incrementVisitedStates();
-
             if (graphDepth > maxGraphDepth) {
                 break;
             }
@@ -44,9 +42,10 @@ public class BFSAlgorithm implements PuzzleSolver {
                 PuzzleNode currentNode = openNodes.remove();
 
                 List<? extends PuzzleNode> expandedNodes = currentNode.getNextLevelNodes();
+                metadata.addToProcessedStates(expandedNodes.size());
                 for (PuzzleNode node : expandedNodes) {
-                    metadata.incrementProcessedStates();
 
+                    metadata.incrementVisitedStates();
                     if (node.getPuzzleState().isResolved()) {
                         isSolutionFound = true;
                         path = node.tracePath();

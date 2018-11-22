@@ -34,7 +34,6 @@ public class AStarAlgorithm implements PuzzleSolver {
             OrderedPuzzleNode puzzleNode = priorityQueue.remove();
 
             metadata.incrementVisitedStates();
-            metadata.incrementVisitedStates();
             metadata.updateRecursionDepthIfGreater(puzzleNode.getDepth());
 
             if (puzzleNode.getPuzzleState().isResolved()) {
@@ -48,6 +47,8 @@ public class AStarAlgorithm implements PuzzleSolver {
 
             List<OrderedPuzzleNode> nextLevelNodes = puzzleNode.getNextLevelNodes();
             priorityQueue.addAll(nextLevelNodes);
+
+            metadata.addToProcessedStates(nextLevelNodes.size());
         }
         metadata.stopMeasuringTime();
         metadata.setSolutionLength(moves.size());
