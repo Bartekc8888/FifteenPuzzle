@@ -14,8 +14,10 @@ public class OrderedPuzzleNode extends PuzzleNode {
     private int differenceFromCorrect;
     private DistanceCalculator distanceCalculator;
 
+    private static List<Move> moveOrder = List.of(Move.LEFT, Move.UP, Move.RIGHT, Move.DOWN);
+
     public OrderedPuzzleNode(Puzzle state, PuzzleNode parent, Move creationMove, int depth, DistanceCalculator distanceCalculator) {
-        super(state, parent, creationMove);
+        super(state, parent, creationMove, moveOrder);
 
         this.depth = depth;
         this.distanceCalculator = distanceCalculator;

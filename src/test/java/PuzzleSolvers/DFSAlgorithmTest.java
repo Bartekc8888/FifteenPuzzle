@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 class DFSAlgorithmTest {
+    private static List<Move> moveOrder = List.of(Move.LEFT, Move.UP, Move.RIGHT, Move.DOWN);
 
     @Test
     void solve() {
@@ -22,7 +23,7 @@ class DFSAlgorithmTest {
                                7, 8, 0};
         Puzzle puzzle = Puzzle.createPuzzle(3, 3, puzzleValues);
 
-        DFSAlgorithm dfsAlgorithm = new DFSAlgorithm(18);
+        DFSAlgorithm dfsAlgorithm = new DFSAlgorithm(18, moveOrder);
         List<Move> result = dfsAlgorithm.solve(puzzle).getSolveMoves();
 
         assertNotNull(result);
@@ -49,7 +50,7 @@ class DFSAlgorithmTest {
                                13, 14, 15, 0};
         Puzzle puzzle = Puzzle.createPuzzle(4, 4, puzzleValues);
 
-        DFSAlgorithm dfsAlgorithm = new DFSAlgorithm(20);
+        DFSAlgorithm dfsAlgorithm = new DFSAlgorithm(20, moveOrder);
         List<Move> result = dfsAlgorithm.solve(puzzle).getSolveMoves();
 
         assertNotNull(result);

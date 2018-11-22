@@ -14,11 +14,12 @@ import puzzleutils.PuzzleContainers.PuzzleSolvingResult;
 @AllArgsConstructor
 public class DFSAlgorithm implements PuzzleSolver {
     private int maxRecursionDepth;
+    private List<Move> moveOrder;
 
     @Override
     public PuzzleSolvingResult solve(Puzzle puzzle) {
         PuzzleSolvingMetadata metadata = new PuzzleSolvingMetadata();
-        PuzzleNode root = new PuzzleNode(puzzle, null, null);
+        PuzzleNode root = new PuzzleNode(puzzle, null, null, moveOrder);
 
         metadata.startMeasuringTime();
         Optional<PuzzleNode> node = solveRecursively(root, 1, metadata);

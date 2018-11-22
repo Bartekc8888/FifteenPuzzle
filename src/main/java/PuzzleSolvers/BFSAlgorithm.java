@@ -11,8 +11,8 @@ import puzzleutils.PuzzleContainers.PuzzleSolvingResult;
 
 @AllArgsConstructor
 public class BFSAlgorithm implements PuzzleSolver {
-
     private int maxGraphDepth;
+    private List<Move> moveOrder;
 
     @Override
     public PuzzleSolvingResult solve(Puzzle puzzle) {
@@ -23,7 +23,7 @@ public class BFSAlgorithm implements PuzzleSolver {
         Set<PuzzleNode> processedNodes = new HashSet<>();
         List<Move> path = new LinkedList<>();
 
-        PuzzleNode root = new PuzzleNode(puzzle, null, null);
+        PuzzleNode root = new PuzzleNode(puzzle, null, null, moveOrder);
         nextLevelOpenNodes.add(root);
         processedNodes.add(root);
 

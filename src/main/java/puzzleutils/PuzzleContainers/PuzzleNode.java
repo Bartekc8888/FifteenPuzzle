@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,12 +19,15 @@ public class PuzzleNode {
     private final Move creationMove;
     private final Puzzle puzzleState;
 
-    public PuzzleNode(Puzzle state, PuzzleNode parent, Move creationMove) {
+    private List<Move> moveOrder;
+
+    public PuzzleNode(Puzzle state, PuzzleNode parent, Move creationMove, List<Move> moveOrder) {
         children = new ArrayList<>();
 
         this.creationMove = creationMove;
         this.parent = parent;
         puzzleState = state;
+        this.moveOrder = moveOrder;
     }
 
     public List<Move> tracePath() {
@@ -44,9 +48,10 @@ public class PuzzleNode {
         List<PuzzleNode> nextLevelNodes = new ArrayList<>();
 
         List<Move> possibleMoves = getPuzzleState().getPossibleMoves();
+        possibleMoves = moveOrder.stream().filter(possibleMoves::contains).collect(Collectors.toList());
         for (Move move : possibleMoves) {
             Puzzle newPuzzleState = getPuzzleState().move(move);
-            nextLevelNodes.add(new PuzzleNode(newPuzzleState, this, move));
+            nextLevelNodes.add(new PuzzleNode(newPuzzleState, this, move, moveOrder));
         }
 
         return nextLevelNodes;

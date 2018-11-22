@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BFSAlgorithmTest {
 
+    private static List<Move> moveOrder = List.of(Move.LEFT, Move.UP, Move.RIGHT, Move.DOWN);
+
     @Test
     void solve() {
         int[] puzzleValues = {4, 3, 6,
@@ -21,7 +23,7 @@ class BFSAlgorithmTest {
                                7, 8, 0};
         Puzzle puzzle = Puzzle.createPuzzle(3, 3, puzzleValues);
 
-        BFSAlgorithm bfsAlgorithm = new BFSAlgorithm(64);
+        BFSAlgorithm bfsAlgorithm = new BFSAlgorithm(64, moveOrder);
         List<Move> result = bfsAlgorithm.solve(puzzle).getSolveMoves();
 
         assertNotNull(result);
@@ -49,7 +51,7 @@ class BFSAlgorithmTest {
                                13, 14, 15, 0};
         Puzzle puzzle = Puzzle.createPuzzle(4, 4, puzzleValues);
 
-        BFSAlgorithm bfsAlgorithm = new BFSAlgorithm(64);
+        BFSAlgorithm bfsAlgorithm = new BFSAlgorithm(64, moveOrder);
         List<Move> result = bfsAlgorithm.solve(puzzle).getSolveMoves();
 
         assertNotNull(result);

@@ -16,11 +16,9 @@ public class PuzzleSolverFactory {
     public static PuzzleSolver createPuzzleSolver(SolverArguments arguments) {
         switch (arguments.getAlgorithmType()) {
             case BFS:
-                getMoveOrder(arguments.getStrategy());
-                return new BFSAlgorithm(30);
+                return new BFSAlgorithm(30, getMoveOrder(arguments.getStrategy()));
             case DFS:
-                getMoveOrder(arguments.getStrategy());
-                return new DFSAlgorithm(30);
+                return new DFSAlgorithm(30, getMoveOrder(arguments.getStrategy()));
             case ASTR:
                 StrategyConverter strategyConverter = new StrategyConverter();
                 DistanceCalculatorType distanceCalculatorType = strategyConverter.convert(arguments.getStrategy());
