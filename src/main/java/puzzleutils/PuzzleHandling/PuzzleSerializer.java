@@ -19,7 +19,7 @@ public class PuzzleSerializer {
     public static void printToFile(String path, Puzzle puzzle) {
         String filePath = path + "/generatedPuzzle.txt";
         File file = new File(filePath);
-        file.getParentFile().mkdirs();
+        file.getAbsoluteFile().getParentFile().mkdirs();
 
         int[] puzzleValues = puzzle.getValues();
         try (PrintWriter out = new PrintWriter(file)) {

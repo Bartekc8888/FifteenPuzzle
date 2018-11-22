@@ -26,6 +26,8 @@ public class DFSAlgorithm implements PuzzleSolver {
         metadata.stopMeasuringTime();
 
         List<Move> moves = node.map(PuzzleNode::tracePath).orElse(Collections.emptyList());
+        metadata.setSolutionLength(moves.size());
+
         return new PuzzleSolvingResult(moves, metadata);
     }
 

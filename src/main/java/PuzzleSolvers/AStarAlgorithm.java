@@ -50,6 +50,7 @@ public class AStarAlgorithm implements PuzzleSolver {
             priorityQueue.addAll(nextLevelNodes);
         }
         metadata.stopMeasuringTime();
+        metadata.setSolutionLength(moves.size());
 
         return new PuzzleSolvingResult(moves, metadata);
     }

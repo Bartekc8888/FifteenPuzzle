@@ -19,7 +19,7 @@ public class ResultSerializer {
     }
 
     private static void saveResult(List<Move> solveMoves, File resultFile) {
-        resultFile.getParentFile().mkdirs();
+        resultFile.getAbsoluteFile().getParentFile().mkdirs();
 
         try (PrintWriter out = new PrintWriter(resultFile)) {
             for (Move move : solveMoves) {
@@ -31,13 +31,14 @@ public class ResultSerializer {
     }
 
     private static void saveMetadata(PuzzleSolvingMetadata metadata, File metadataFile) {
-        metadataFile.getParentFile().mkdirs();
+        metadataFile.getAbsoluteFile().getParentFile().mkdirs();
 
         try (PrintWriter out = new PrintWriter(metadataFile)) {
-            out.print(metadata.getProcessedStates());
-            out.print(metadata.getVisitedStates());
-            out.print(metadata.getRecursionDepth());
-            out.print(String.format( "%.3f", metadata.getExecutionTimeInMilliseconds()));
+            out.println(metadata.getSolutionLength());
+            out.println(metadata.getProcessedStates());
+            out.println(metadata.getVisitedStates());
+            out.println(metadata.getRecursionDepth());
+            out.println(String.format( "%.3f", metadata.getExecutionTimeInMilliseconds()));
         } catch (FileNotFoundException e) {
             log.error("Error while trying to save result", e);
         }

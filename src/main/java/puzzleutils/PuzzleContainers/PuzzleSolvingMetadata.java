@@ -32,7 +32,7 @@ public class PuzzleSolvingMetadata {
 
     public void stopMeasuringTime() {
         if (startTime > 0) {
-            executionTimeInMilliseconds = (System.nanoTime() - startTime) / 1000.d;
+            executionTimeInMilliseconds = (System.nanoTime() - startTime) / 1_000_000.d;
         }
     }
 }

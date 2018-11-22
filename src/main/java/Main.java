@@ -36,7 +36,13 @@ public class Main {
             PuzzleSolver puzzleSolver = PuzzleSolverFactory.createPuzzleSolver(solverArguments);
 
             PuzzleSolvingResult solvedResults = puzzleSolver.solve(puzzle);
+
+            log.info("solving finished");
+            log.info("trying to save results");
+
             ResultSerializer.serializeResult(solvedResults, solverArguments.getResultFile(), solverArguments.getMetadataFile());
+
+            log.info("results saved");
         }
     }
 }

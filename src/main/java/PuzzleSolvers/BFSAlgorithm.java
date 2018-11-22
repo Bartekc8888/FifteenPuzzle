@@ -61,6 +61,7 @@ public class BFSAlgorithm implements PuzzleSolver {
         }
         metadata.stopMeasuringTime();
         metadata.setRecursionDepth(graphDepth);
+        metadata.setSolutionLength(path.size());
 
         return new PuzzleSolvingResult(path, metadata);
     }
